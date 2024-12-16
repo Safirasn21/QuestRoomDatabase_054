@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.entity.Mahasiswa
 import com.example.myapplication.repository.RepositoryMhs
+import com.example.myapplication.ui.navigation.DestinasiUpdate
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class UpdateMhsViewModel(
     var updateUIState by mutableStateOf(MhsUIState())
         private set
 
-    private  val _nim: String = checkNotNull(savedStateHandle[DestinasiEdit.NIM])
+    private  val _nim: String = checkNotNull(savedStateHandle[DestinasiUpdate.NIM])
     init {
         viewModelScope.launch {
             updateUIState = repositoryMhs.getMhs(_nim)
