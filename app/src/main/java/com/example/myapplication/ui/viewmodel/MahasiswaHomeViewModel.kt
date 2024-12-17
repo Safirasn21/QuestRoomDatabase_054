@@ -16,10 +16,11 @@ import kotlinx.coroutines.flow.stateIn
 class MahasiswaHomeViewModel (
     private val repositoryMhs: RepositoryMhs
 ) : ViewModel() {
-    val homeUIState: StateFlow<HomeUiState> = repositoryMhs.getAllMhs()
+
+    val homeUiState: StateFlow<HomeUiState> = repositoryMhs.getAllMhs()
         .filterNotNull()
         .map {
-            HomeUiState(
+            HomeUiState (
                 listMhs = it.toList(),
                 isLoading = false,
             )
@@ -33,7 +34,7 @@ class MahasiswaHomeViewModel (
                 HomeUiState(
                     isLoading = false,
                     isError = true,
-                    errorMessage = it.message ?: "Terjadi kesalahan"
+                    errorMessage = it.message ?: "Terjadi Kesalahan"
                 )
             )
         }
@@ -45,7 +46,8 @@ class MahasiswaHomeViewModel (
             )
         )
 }
-data class HomeUiState(
+
+data class HomeUiState (
     val listMhs: List<Mahasiswa> = listOf(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
