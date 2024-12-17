@@ -48,13 +48,13 @@ fun HomeMhsView(
     onAddMhs: () -> Unit = { },
     onDetailClick: (String) -> Unit = { },
     modifier: Modifier = Modifier
-){
+) {
     Scaffold (
         topBar = {
             TopAppBar(
-                judul = "Daftar Mahasiswa",
-                showBackButton = false,
                 onBack = { },
+                showBackButton = false,
+                judul = "Daftar Mahasiswa",
                 modifier = modifier
             )
         },
@@ -70,8 +70,8 @@ fun HomeMhsView(
                 )
             }
         }
-    ){ innerPadding ->
-        val homeUiState by viewModel.homeUIState.collectAsState()
+    ) { innerPadding ->
+        val homeUiState by viewModel.homeUiState.collectAsState()
 
         BodyHomeMhsView(
             homeUiState = homeUiState,
@@ -80,7 +80,6 @@ fun HomeMhsView(
             },
             modifier = Modifier.padding(innerPadding)
         )
-
     }
 }
 
@@ -89,35 +88,37 @@ fun BodyHomeMhsView(
     homeUiState: HomeUiState,
     onClick: (String) -> Unit = { },
     modifier: Modifier = Modifier
-){
+) {
     val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() } // Snackbar State
     when {
         homeUiState.isLoading -> {
-            Box (
+            // Menampilkan indikator loading
+            Box(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 CircularProgressIndicator()
             }
         }
+
         homeUiState.isError -> {
-            //menampilkan pesan error
-            LaunchedEffect(homeUiState.errorMessage) {
+            // Menampilkan pesan error
+            LaunchedEffect (homeUiState.errorMessage) {
                 homeUiState.errorMessage?.let { message ->
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(message)
+                        snackbarHostState.showSnackbar(message) // Tampilkan Snackbar
                     }
                 }
             }
         }
 
         homeUiState.listMhs.isEmpty() -> {
-            //menampilkan pesan jika data kosong
+            // Menampilkan pesan jika data kosong
             Box(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Text(
                     text = "Tidak ada data mahasiswa.",
                     fontSize = 18.sp,
@@ -128,14 +129,12 @@ fun BodyHomeMhsView(
         }
 
         else -> {
-            //menampilkan daftar mahasiswa
+            // Menampilkan daftar mahasiswa
             ListMahasiswa(
                 listMhs = homeUiState.listMhs,
                 onClick = {
                     onClick(it)
-                    println(
-                        it
-                    )
+                    println(it)
                 },
                 modifier = modifier
             )
@@ -148,7 +147,7 @@ fun ListMahasiswa(
     listMhs: List<Mahasiswa>,
     modifier: Modifier = Modifier,
     onClick: (String) -> Unit = { }
-){
+) {
     LazyColumn (
         modifier = modifier
     ) {
@@ -157,33 +156,34 @@ fun ListMahasiswa(
             itemContent = { mhs ->
                 CardMhs(
                     mhs = mhs,
-                    onClick = { onClick(mhs.nim)}
+                    onClick = { onClick(mhs.nim) }
                 )
-
             }
         )
     }
 }
-@OptIn (ExperimentalMaterial3Api::class)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  CardMhs(
+fun CardMhs(
     mhs: Mahasiswa,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { }
-){
-    Card (
+) {
+    Card(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Column (
-            modifier = Modifier.padding(8.dp)
-        ){
+            modifier = Modifier.padding(8.dp),
+        ) {
+
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(imageVector = Icons.Filled.Person, contentDescription = "")
                 Spacer(modifier = Modifier.padding(4.dp))
                 Text(
@@ -192,10 +192,11 @@ fun  CardMhs(
                     fontSize = 20.sp
                 )
             }
+
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(imageVector = Icons.Filled.DateRange, contentDescription = "")
                 Spacer(modifier = Modifier.padding(4.dp))
                 Text(
@@ -204,10 +205,11 @@ fun  CardMhs(
                     fontSize = 16.sp
                 )
             }
+
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(imageVector = Icons.Filled.Home, contentDescription = "")
                 Spacer(modifier = Modifier.padding(4.dp))
                 Text(
